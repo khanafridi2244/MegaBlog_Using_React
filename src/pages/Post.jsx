@@ -26,7 +26,13 @@ export default function Post() {
     const deletePost = () => {
         appwriteService.deletePost(post.$id).then((status) => {
             if (status) {
-                appwriteService.deleteFile(post.featuredImage);
+                // Delete both featured image and thumbnail
+                if (post.featuredImage) {
+                    appwriteService.deleteFile(post.featuredImage);
+                }
+                if (post.thumbnail) {
+                    appwriteService.deleteFile(post.thumbnail);
+                }
                 navigate("/");
             }
         });
@@ -34,7 +40,7 @@ export default function Post() {
 
     return post ? (
         <div className="animate-fade-in">
-            {/* Hero Image Section */}
+            {/* Hero Image Section - Uses the user's uploaded featured image as background */}
             <div className="w-full relative bg-bg-dark overflow-hidden">
                 {post.featuredImage ? (
                     <>
@@ -42,11 +48,15 @@ export default function Post() {
                             src={appwriteService.getFileView(post.featuredImage)}
                             alt={post.title}
                             className="w-full h-[50vh] md:h-[60vh] object-cover opacity-40"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                console.error('Image failed to load:', e.target.src);
+                            }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-linear-to-t from-bg-dark via-bg-dark/60 to-transparent"></div>
                     </>
                 ) : (
-                    <div className="w-full h-[40vh] bg-bg-dark"></div>
+                    <div className="w-full h-[50vh] md:h-[60vh] bg-surface-hover"></div>
                 )}
                 <Container>
                     <div className="absolute bottom-0 left-0 right-0 pb-12 md:pb-16">
@@ -57,13 +67,13 @@ export default function Post() {
                             {isAuthor && (
                                 <div className="flex gap-3">
                                     <Link to={`/edit-post/${post.$id}`}>
-                                        <Button className="!px-5 !py-2 !text-sm !rounded-lg">
+                                        <Button className="px-5! py-2! text-sm! rounded-lg!">
                                             Edit Post
                                         </Button>
                                     </Link>
                                     <Button
                                         bgColor="bg-danger"
-                                        className="!px-5 !py-2 !text-sm !rounded-lg"
+                                        className="px-5! py-2! text-sm! rounded-lg!"
                                         onClick={deletePost}
                                     >
                                         Delete

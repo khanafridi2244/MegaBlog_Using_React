@@ -15,7 +15,7 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, featuredImage, status, userId }) {
+    async createPost({ title, slug, content, featuredImage, thumbnail, status, userId }) {
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
@@ -25,6 +25,7 @@ export class Service {
                     title: title,
                     content,
                     featuredimage: featuredImage,
+                    thumbnail: thumbnail,
                     status,
                     userid: userId,
                 }
@@ -34,7 +35,7 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status }) {
+    async updatePost(slug, { title, content, featuredImage, thumbnail, status }) {
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
@@ -44,6 +45,7 @@ export class Service {
                     title: title,
                     content,
                     featuredimage: featuredImage,
+                    thumbnail: thumbnail,
                     status,
                 }
             );
@@ -141,6 +143,7 @@ export class Service {
         }
     }
 
+    // Use for thumbnails (resized images)
     getFilePreview(fileId, width = 400, height = 300) {
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
@@ -150,6 +153,7 @@ export class Service {
         );
     }
 
+    // Use for full-size images
     getFileView(fileId) {
         return this.bucket.getFileView(
             conf.appwriteBucketId,

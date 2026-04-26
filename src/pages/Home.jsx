@@ -3,6 +3,9 @@ import appwriteService from "../appwrite/config";
 import {Container, PostCard} from '../components'
 import { Link } from 'react-router-dom';
 
+// Fixed hero background image - single consistent image for the read article section
+const HERO_BG_IMAGE = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1400&h=800&fit=crop";
+
 function Home() {
     const [posts, setPosts] = useState([])
 
@@ -50,33 +53,34 @@ function Home() {
 
     return (
         <div className='w-full animate-fade-in'>
-            {/* Hero Section */}
+            {/* Hero Section - Fixed background image */}
             {featuredPost && (
-                <section className='relative bg-bg-dark text-white overflow-hidden'>
-                    <div className='absolute inset-0 opacity-20'>
-                        {featuredPost.featuredImage ? (
-                            <img
-                                src={appwriteService.getFilePreview(featuredPost.featuredImage, 1200, 600)}
-                                alt=""
-                                className='w-full h-full object-cover'
-                            />
-                        ) : null}
-                        <div className='absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/80 to-transparent'></div>
+                <section className='relative text-white overflow-hidden min-h-[70vh] flex items-center'>
+                    {/* Background Image - Single fixed image */}
+                    <div className='absolute inset-0'>
+                        <img
+                            src={HERO_BG_IMAGE}
+                            alt=""
+                            className='w-full h-full object-cover'
+                        />
+                        {/* Dark overlay for text readability */}
+                        <div className='absolute inset-0 bg-bg-dark/70'></div>
+                        <div className='absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-bg-dark/40'></div>
                     </div>
                     <Container>
-                        <div className='relative py-20 md:py-32 max-w-3xl'>
-                            <span className='inline-block px-3 py-1 bg-primary/20 text-primary-light rounded-full text-sm font-medium mb-4 backdrop-blur-sm'>
+                        <div className='relative py-20 md:py-28 max-w-3xl'>
+                            <span className='inline-block px-4 py-1.5 bg-white/10 text-white/90 rounded-full text-sm font-medium mb-6 backdrop-blur-md border border-white/20'>
                                 Featured Post
                             </span>
-                            <h1 className='text-4xl md:text-6xl font-bold leading-tight mb-6'>
+                            <h1 className='text-4xl md:text-6xl font-bold leading-tight mb-6 drop-shadow-lg'>
                                 {featuredPost.title}
                             </h1>
                             <Link
                                 to={`/post/${featuredPost.$id}`}
-                                className='inline-flex items-center gap-2 bg-white text-bg-dark px-6 py-3 rounded-xl font-medium hover:bg-surface-hover transition-colors duration-200'
+                                className='inline-flex items-center gap-2 bg-white text-bg-dark px-8 py-3.5 rounded-xl font-semibold hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl'
                             >
                                 Read Article
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
                             </Link>

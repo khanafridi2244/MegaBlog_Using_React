@@ -2,21 +2,23 @@ import React from 'react'
 import appwriteService from "../appwrite/config"
 import {Link} from 'react-router-dom'
 
-function PostCard({$id, title, featuredImage}) {
+function PostCard({$id, title, featuredImage, thumbnail}) {
+
+  // Use thumbnail if available, otherwise fall back to featuredImage
+  const imageToShow = thumbnail || featuredImage;
 
   return (
     <Link to={`/post/${$id}`} className="block group">
         <div className='w-full bg-bg-card rounded-2xl p-4 shadow-card card-hover border border-border'>
             <div className='w-full justify-center mb-4 rounded-xl overflow-hidden bg-surface-hover'>
-                {featuredImage ? (
+                {imageToShow ? (
                     <img
-                        src={appwriteService.getFilePreview(featuredImage, 400, 300)}
+                        src={appwriteService.getFilePreview(imageToShow, 400, 300)}
                         alt={title}
                         className='rounded-xl w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105'
                         onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = '';
-                            e.target.style.display = 'none';
+                            console.error('Image failed to load:', e.target.src);
                         }}
                     />
                 ) : (
@@ -36,3 +38,4 @@ function PostCard({$id, title, featuredImage}) {
 }
 
 export default PostCard
+
