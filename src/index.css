@@ -1,1 +1,262 @@
+/* ============================================================
+   MEGA BLOG - CENTRAL THEME FILE
+   Edit this ONE file to change all colors and animations!
+   ============================================================ */
+
 @import "tailwindcss";
+
+/* ------------------- CUSTOM COLOR PALETTE ------------------- */
+@theme {
+  /* Primary Brand Colors */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-light: #e0e7ff;
+  --color-primary-dark: #3730a3;
+
+  /* Background Colors */
+  --color-bg-page: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-dark: #0f172a;
+  --color-bg-header: rgba(255, 255, 255, 0.85);
+
+  /* Surface & Overlay */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+
+  /* Text Colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  /* Border & Divider */
+  --color-border: #e2e8f0;
+  --color-border-focus: #4f46e5;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-danger: #f43f5e;
+  --color-danger-light: #ffe4e6;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-card: 0 4px 20px -2px rgb(0 0 0 / 0.08);
+  --shadow-card-hover: 0 20px 40px -8px rgb(0 0 0 / 0.15);
+
+  /* Custom Animations */
+  --animate-fade-in: fadeIn 0.6s ease-out forwards;
+  --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
+  --animate-fade-in-down: fadeInDown 0.5s ease-out forwards;
+  --animate-slide-up: slideUp 0.5s ease-out forwards;
+  --animate-slide-down: slideDown 0.4s ease-out forwards;
+  --animate-scale-in: scaleIn 0.4s ease-out forwards;
+  --animate-pulse-soft: pulseSoft 2s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-bounce-soft: bounceSoft 2s ease-in-out infinite;
+  --animate-spin-slow: spin 3s linear infinite;
+}
+
+/* ------------------- KEYFRAME DEFINITIONS ------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bounceSoft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ------------------- UTILITY CLASSES ------------------- */
+@utility gradient-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+@utility gradient-text {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@utility card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@utility img-zoom {
+  overflow: hidden;
+}
+
+@utility btn-press {
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+@layer utilities {
+  .card-hover:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .img-zoom img {
+    transition: transform 0.5s ease;
+  }
+
+  .img-zoom:hover img {
+    transform: scale(1.08);
+  }
+
+  .btn-press:active {
+    transform: scale(0.96);
+  }
+}
+
+@utility shimmer-bg {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@utility line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ------------------- GLOBAL STYLES ------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+/* Focus visible ring */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
@@ -17,6 +17,9 @@ export default function PostForm({ post }) {
 
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
+    const [previewUrl, setPreviewUrl] = useState(null);
+
+    const selectedImage = watch("image");
 
     const submit = async (data) => {
         if (post) {
@@ -60,6 +63,17 @@ export default function PostForm({ post }) {
         return "";
     }, []);
 
+    // Generate local thumbnail preview when a new file is selected
+    useEffect(() => {
+        if (selectedImage && selectedImage[0]) {
+            const url = URL.createObjectURL(selectedImage[0]);
+            setPreviewUrl(url);
+            return () => URL.revokeObjectURL(url);
+        } else {
+            setPreviewUrl(null);
+        }
+    }, [selectedImage]);
+
     React.useEffect(() => {
         const subscription = watch((value, { name }) => {
             if (name === "title") {
@@ -71,52 +85,79 @@ export default function PostForm({ post }) {
     }, [watch, slugTransform, setValue]);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-            <div className="w-2/3 px-2">
-                <Input
-                    label="Title :"
-                    placeholder="Title"
-                    className="mb-4"
-                    {...register("title", { required: true })}
-                />
-                <Input
-                    label="Slug :"
-                    placeholder="Slug"
-                    className="mb-4"
-                    {...register("slug", { required: true })}
-                    onInput={(e) => {
-                        setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
-                    }}
-                />
-                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
-            </div>
-            <div className="w-1/3 px-2">
-                <Input
-                    label="Featured Image :"
-                    type="file"
-                    className="mb-4"
-                    accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
-                />
-                {post && (
-                    <div className="w-full mb-4">
-                        <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
-                            alt={post.title}
-                            className="rounded-lg"
-                        />
+        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap -mx-2">
+            <div className="w-full lg:w-2/3 px-2">
+                <div className="space-y-5">
+                    <Input
+                        label="Title"
+                        placeholder="Enter post title"
+                        className="mb-0"
+                        {...register("title", { required: true })}
+                    />
+                    <Input
+                        label="Slug"
+                        placeholder="post-url-slug"
+                        className="mb-0"
+                        {...register("slug", { required: true })}
+                        onInput={(e) => {
+                            setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
+                        }}
+                    />
+                    <div>
+                        <label className="inline-block mb-2 pl-1 text-sm font-medium text-text-secondary">
+                            Content
+                        </label>
+                        <RTE name="content" control={control} defaultValue={getValues("content")} />
                     </div>
-                )}
-                <Select
-                    options={["active", "inactive"]}
-                    label="Status"
-                    className="mb-4"
-                    {...register("status", { required: true })}
-                />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Submit"}
-                </Button>
+                </div>
+            </div>
+            <div className="w-full lg:w-1/3 px-2 mt-6 lg:mt-0">
+                <div className="bg-surface-hover rounded-xl p-5 space-y-5 border border-border">
+                    <Input
+                        label="Featured Image"
+                        type="file"
+                        accept="image/png, image/jpg, image/jpeg, image/gif"
+                        {...register("image", { required: !post })}
+                    />
+                    {previewUrl && (
+                        <div className="w-full">
+                            <p className="text-sm text-text-secondary mb-2 font-medium">New Image Preview:</p>
+                            <img
+                                src={previewUrl}
+                                alt="Selected thumbnail"
+                                className="rounded-xl w-full h-48 object-cover border border-border"
+                            />
+                        </div>
+                    )}
+                    {post && post.featuredImage && !previewUrl && (
+                        <div className="w-full">
+                            <p className="text-sm text-text-secondary mb-2 font-medium">Current Image:</p>
+                            <img
+                                src={appwriteService.getFilePreview(post.featuredImage, 400, 300)}
+                                alt={post.title}
+                                className="rounded-xl w-full object-cover"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.style.display = 'none';
+                                }}
+                            />
+                        </div>
+                    )}
+                    <Select
+                        options={["active", "inactive"]}
+                        label="Status"
+                        {...register("status", { required: true })}
+                    />
+                    <Button
+                        type="submit"
+                        bgColor={post ? "bg-success" : undefined}
+                        className="w-full"
+                    >
+                        {post ? "Update Post" : "Publish Post"}
+                    </Button>
+                </div>
             </div>
         </form>
     );
 }
+

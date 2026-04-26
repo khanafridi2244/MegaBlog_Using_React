@@ -13,7 +13,7 @@ function Header() {
       name: 'Home',
       slug: "/",
       active: true
-    }, 
+    },
     {
       name: "Login",
       slug: "/login",
@@ -38,22 +38,21 @@ function Header() {
 
 
   return (
-    <header className='py-3 shadow bg-gray-500'>
+    <header className='sticky top-0 z-50 glass border-b border-border shadow-sm animate-fade-in-down'>
       <Container>
-        <nav className='flex'>
+        <nav className='flex items-center py-4'>
           <div className='mr-4'>
-            <Link to='/'>
-              <Logo width='70px'   />
-
-              </Link>
+            <Link to='/' className='hover:opacity-80 transition-opacity'>
+              <Logo width='120px' />
+            </Link>
           </div>
-          <ul className='flex ml-auto'>
-            {navItems.map((item) => 
+          <ul className='flex ml-auto items-center gap-1'>
+            {navItems.map((item) =>
             item.active ? (
               <li key={item.name}>
                 <button
                 onClick={() => navigate(item.slug)}
-                className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+                className='inline-block px-5 py-2 text-sm font-medium text-text-secondary hover:text-primary hover:bg-primary-light rounded-full transition-all duration-200'
                 >{item.name}</button>
               </li>
             ) : null
