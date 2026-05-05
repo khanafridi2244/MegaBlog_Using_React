@@ -78,44 +78,6 @@ npm run build
 
 ---
 
-## 🚀 Deployment (Vercel)
-
-1. Push code to GitHub
-2. Import project into Vercel
-3. Set environment variables
-4. Deploy
-
----
-
-## 🐞 Common Issues & Fixes
-
-### ❌ Vercel Build Error (Case Sensitivity)
-
-```
-Could not resolve "./Login"
-```
-
-✔ Fix: Ensure file names match imports exactly:
-
-```js
-import Login from "./login"; // if file is login.jsx
-```
-
----
-
-### ❌ JSON Import Error (Node.js v20+)
-
-```
-SyntaxError: Unexpected identifier 'assert'
-```
-
-✔ Fix:
-
-```js
-import data from "./file.json" with { type: "json" };
-```
-
----
 
 ## 📁 Project Structure
 
@@ -134,7 +96,7 @@ src/
 
 ## 👨‍💻 Author
 
-* Sikandar
+* Sikandar Afridi
 
 ---
 
